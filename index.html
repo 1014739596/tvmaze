@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TVMaze App</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="icon.png" type="image/png">
+</head>
+<body>
+  <!-- Splash -->
+  <div id="splash">
+    <img src="icon.png" alt="TVMaze Logo" class="logo">
+    <h1>TVMaze App</h1>
+  </div>
+
+  <!-- Menú de navegación -->
+  <nav class="menu">
+    <button data-tab="home" class="active">Inicio</button>
+    <button data-tab="buscar">Buscar</button>
+    <button data-tab="favoritos">Favoritos</button>
+    <button data-tab="original">Original</button>
+    <button data-tab="info">Info</button>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main id="content"></main>
+
+  <!-- Scripts -->
+  <script src="js/shared.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/favorites.js"></script>
+  <script src="js/original.js"></script>
+  <script src="js/info.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
