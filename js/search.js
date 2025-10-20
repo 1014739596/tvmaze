@@ -1,116 +1,51 @@
-let showsCache = [];
-const content = document.getElementById("content");
-
 function mostrarBuscador() {
   content.innerHTML = `
-    <section class="search-section fade-in">
-      <h2>🔍 Buscar series</h2>
-      
-      <div class="search-bar">
-        <input 
-          type="text" 
-          id="searchInput" 
-          placeholder="Ej: Friends, The Office..." 
-          autocomplete="off"
-        >
-        <select id="genreFilter">
-          <option value="">Todos los géneros</option>
-          <option value="Drama">Drama</option>
-          <option value="Comedy">Comedia</option>
-          <option value="Action">Acción</option>
-          <option value="Sci-Fi">Ciencia ficción</option>
-          <option value="Horror">Terror</option>
-          <option value="Romance">Romance</option>
-        </select>
-      </div>
-
-      <div id="results" class="results-grid fade-in"></div>
-      <p id="noResults" class="no-results hidden">No se encontraron resultados.</p>
-    </section>
+    <h2>Buscar series</h2>
+    <input type="text" id="searchInput" placeholder="Ej: Friends...">
+    <select id="genreFilter">
+      <option value="">Filtrar por género</option>
+      <option value="Drama">Drama</option>
+      <option value="Comedy">Comedy</option>
+      <option value="Action">Action</option>
+    </select>
+    <div id="results"></div>
   `;
 
-  const searchInput = document.getElementById("searchInput");
-  const genreFilter = document.getElementById("genreFilter");
-
-  searchInput.addEventListener("input", debounce(buscarSerie, 500));
-  genreFilter.addEventListener("change", filtrarPorGenero);
+  document.getElementById("searchInput").addEventListener("input", buscarSerie);
+  document.getElementById("genreFilter").addEventListener("change", filtrarPorGenero);
 }
 
-async function buscarSerie() {
-  const query = document.getElementById("searchInput").value.trim();
-  const results = document.getElementById("results");
-  const noResults = document.getElementById("noResults");
+async function buscarSerie(e) {
+  const query = e.target.value.trim();
+  if (!query) return (document.getElementById("results").innerHTML = "");
 
-  if (!query) {
-    results.innerHTML = "";
-    noResults.classList.add("hidden");
-    return;
-  }
-
-  results.innerHTML = `<p class="loading">🔎 Buscando "${query}"...</p>`;
-  noResults.classList.add("hidden");
-
-  try {
-    const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`);
-    const data = await res.json();
-
-    showsCache = data.map(r => r.show);
-
-    if (showsCache.length === 0) {
-      results.innerHTML = "";
-      noResults.classList.remove("hidden");
-      return;
-    }
-
-    renderResults(showsCache);
-  } catch (error) {
-    console.error("Error al buscar la serie:", error);
-    results.innerHTML = `<p class="error">❌ Error al cargar los resultados. Intenta nuevamente.</p>`;
-  }
+  const res = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`);
+  const data = await res.json();
+  showsCache = data.map(r => r.show);
+  renderResults(showsCache);
 }
 
 function renderResults(shows) {
   const results = document.getElementById("results");
-
   results.innerHTML = shows
     .map(
       s => `
-      <div class="show-card fade-in" onclick="mostrarDetalle(${s.id})">
-        <img 
-          src="${s.image?.medium || 'https://via.placeholder.com/250x350?text=Sin+imagen'}" 
-          alt="${s.name}"
-        >
-        <div class="show-info">
-          <h3>${s.name}</h3>
-          <p>${s.genres.length ? s.genres.join(", ") : "Sin género"}</p>
-        </div>
+    <div class="show-card" onclick="mostrarDetalle(${s.id})">
+      <img src="${s.image?.medium || 'https://via.placeholder.com/100'}">
+      <div class="show-info">
+        <h3>${s.name}</h3>
+        <p>${s.genres.join(", ")}</p>
       </div>
-    `
+    </div>
+  `
     )
     .join("");
 }
 
 function filtrarPorGenero() {
   const genre = document.getElementById("genreFilter").value;
-  const filtered = genre
+  const filtrados = genre
     ? showsCache.filter(s => s.genres.includes(genre))
     : showsCache;
-
-  renderResults(filtered);
-
-  const noResults = document.getElementById("noResults");
-  if (filtered.length === 0) {
-    noResults.classList.remove("hidden");
-  } else {
-    noResults.classList.add("hidden");
-  }
-}
-
-/* 🧠 Evita que se dispare la búsqueda muchas veces seguidas */
-function debounce(fn, delay) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delay);
-  };
+  renderResults(filtrados);
 }
