@@ -1,12 +1,9 @@
-// 📌 Agregar una serie a favoritos
 function agregarFavorito(id, nombre, imagen) {
-  // Revisar si ya está en favoritos
   var existe = favoritos.some(function(f) {
     return f.id === id;
   });
 
   if (!existe) {
-    // Si no hay imagen, usar una por defecto
     if (!imagen) {
       imagen = "https://via.placeholder.com/200x280?text=Sin+imagen";
     }
@@ -21,11 +18,9 @@ function agregarFavorito(id, nombre, imagen) {
   }
 }
 
-// 📜 Mostrar lista de favoritos
 function mostrarFavoritos() {
   content.innerHTML = "<h2>⭐ Tus favoritos</h2><div class='show-grid'></div>";
 
-  // Si no hay favoritos, mostrar mensaje
   if (favoritos.length === 0) {
     content.innerHTML += "<p class='mensaje-vacio'>No tienes favoritos aún.</p>";
     return;
@@ -33,7 +28,6 @@ function mostrarFavoritos() {
 
   var grid = document.querySelector(".show-grid");
 
-  // Crear las tarjetas de favoritos
   var html = "";
   favoritos.forEach(function(s) {
     html += `
@@ -50,7 +44,6 @@ function mostrarFavoritos() {
   grid.innerHTML = html;
 }
 
-// 🗑️ Eliminar favorito
 function eliminarFavorito(id) {
   // Buscar nombre del eliminado
   var eliminado = "";
@@ -64,7 +57,6 @@ function eliminarFavorito(id) {
   mostrarNotificacion("🗑️ \"" + eliminado + "\" eliminado de favoritos");
 }
 
-// 💬 Notificación flotante
 function mostrarNotificacion(mensaje) {
   var noti = document.createElement("div");
   noti.className = "notificacion";

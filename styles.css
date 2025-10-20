@@ -1,4 +1,4 @@
-/* 🎨 Reset y configuración general */
+/* Reset y configuración general */
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +13,7 @@ body {
   overflow-x: hidden;
 }
 
-/* 💫 Pantalla de carga */
+/* Pantalla de carga */
 #splash {
   position: fixed;
   inset: 0;
@@ -41,7 +41,7 @@ body {
   }
 }
 
-/* 📱 Barra inferior de navegación */
+/* Barra inferior de navegación */
 .menu {
   display: flex;
   justify-content: space-around;
@@ -71,13 +71,13 @@ body {
   transform: scale(1.1);
 }
 
-/* 🧩 Contenido principal */
+/* Contenido principal */
 main {
   padding: 20px;
   margin-bottom: 90px;
 }
 
-/* 🎬 Lista de series/películas */
+/* Lista de series/películas */
 .show-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -125,7 +125,7 @@ main {
   color: #ccc;
 }
 
-/* 🎞️ Detalle de serie */
+/* Detalle de serie */
 main h2 {
   color: #ffca28;
   margin-bottom: 15px;
@@ -146,7 +146,7 @@ main p {
   margin-bottom: 20px;
 }
 
-/* ⭐ Botones */
+/* Botones */
 button {
   background: #ffca28;
   color: #000;
@@ -164,7 +164,7 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* 🔍 Inputs y selects */
+/* Inputs y selects */
 input,
 select {
   width: 100%;
@@ -177,7 +177,7 @@ select {
   color: #fff;
 }
 
-/* 📱 Responsividad */
+/* Responsividad */
 @media (max-width: 768px) {
   .show-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -192,7 +192,7 @@ select {
   }
 }
 
-/* 💬 Notificaciones flotantes */
+/* Notificaciones flotantes */
 .notificacion {
   position: fixed;
   bottom: 80px;
@@ -214,7 +214,7 @@ select {
   opacity: 1;
 }
 
-/* ❌ Botón eliminar */
+/* Botón eliminar */
 .btn-delete {
   background: #ff4d4d;
   color: #fff;
@@ -232,7 +232,7 @@ select {
   transform: scale(1.05);
 }
 
-/* ℹ️ Sección de información */
+/* Sección de información */
 .info-section {
   max-width: 800px;
   margin: 40px auto;
@@ -281,7 +281,7 @@ select {
   color: #bbb;
 }
 
-/* ✨ Animación suave */
+/* Animación suave */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -325,7 +325,7 @@ select {
   transition: opacity 0.4s ease-in;
 }
 
-/* 🎬 --- BUSCADOR DE SERIES / PELÍCULAS --- */
+/* --- BUSCADOR DE SERIES / PELÍCULAS --- */
 #searchInput,
 #genreFilter {
   width: 100%;
@@ -347,7 +347,7 @@ select {
   background: #1c1c1c;
 }
 
-/* 🔍 Título del buscador */
+/* Título del buscador */
 main h2,
 #content h2 {
   color: #ffca28;
@@ -358,7 +358,7 @@ main h2,
   letter-spacing: 1px;
 }
 
-/* 🎞️ Contenedor de resultados */
+/* Contenedor de resultados */
 #results {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
@@ -367,7 +367,7 @@ main h2,
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* 🖼️ Tarjeta de cada serie/película */
+/* Tarjeta de cada serie/película */
 .show-card {
   background: linear-gradient(145deg, #1a1a1a, #121212);
   border-radius: 14px;
@@ -395,7 +395,7 @@ main h2,
   opacity: 0.85;
 }
 
-/* 🧾 Información dentro de la tarjeta */
+/* Información dentro de la tarjeta */
 .show-info {
   padding: 12px;
   text-align: center;
@@ -414,7 +414,7 @@ main h2,
   letter-spacing: 0.5px;
 }
 
-/* 🪄 Animación de carga de tarjetas */
+/* Animación de carga de tarjetas */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -426,7 +426,7 @@ main h2,
   }
 }
 
-/* 📱 Responsividad */
+/* Responsividad */
 @media (max-width: 768px) {
   #results {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -444,7 +444,7 @@ main h2,
   }
 }
 
-/* 💡 Pequeño efecto al escribir */
+/* Pequeño efecto al escribir */
 #searchInput::placeholder {
   color: #aaa;
   transition: color 0.3s;
@@ -454,7 +454,7 @@ main h2,
   color: #666;
 }
 
-/* 🌀 Animaciones suaves */
+/* Animaciones suaves */
 .fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }
@@ -463,7 +463,7 @@ main h2,
   display: none;
 }
 
-/* 📡 Estado de carga y errores */
+/* Estado de carga y errores */
 .loading {
   text-align: center;
   color: #ffca28;
@@ -486,7 +486,7 @@ main h2,
 }
 
 /* ===============================
-   🎬 Estilos mejorados del buscador
+   Estilos mejorados del buscador
    =============================== */
 .search-section {
   max-width: 900px;
