@@ -1,8 +1,20 @@
 function mostrarInfo() {
   content.innerHTML = `
-    <h2>Acerca de</h2>
-    <p>Aplicación creada usando la API pública de <strong>TVMaze</strong>.</p>
-    <p>Permite buscar, filtrar, ver detalles y guardar tus series favoritas.</p>
-    <p>Desarrollado con JavaScript puro y estructura modular.</p>
+    <section class="info-section">
+      <h2>ℹ️ Acerca de la aplicación</h2>
+      <div class="info-card">
+        <p>Esta aplicación fue desarrollada utilizando la API pública de <strong>TVMaze</strong>, que ofrece información actualizada sobre miles de series y programas de televisión.</p>
+
+        <p>📺 Con esta app puedes:</p>
+        <ul>
+          <li>🔍 Buscar y explorar tus series favoritas</li>
+          <li>⭐ Guardar títulos en tu lista de favoritos</li>
+          <li>🧠 Consultar sinopsis y géneros</li>
+          <li>📱 Disfrutar de una interfaz moderna y adaptable</li>
+        </ul>
+
+        <p class="creditos">Desarrollado por <strong>Juan Sebastián Rojas Lamprea</strong> con JavaScript puro, HTML y CSS responsive.</p>
+      </div>
+    </section>
   `;
 }

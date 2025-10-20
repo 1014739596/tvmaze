@@ -231,3 +231,64 @@ select {
   background: #ff6666;
   transform: scale(1.05);
 }
+
+/* ℹ️ Sección de información */
+.info-section {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.info-section h2 {
+  color: #ffca28;
+  font-size: 26px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(255, 202, 40, 0.4);
+}
+
+.info-card {
+  background: #1f1f1f;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(255, 202, 40, 0.1);
+  text-align: left;
+  color: #e0e0e0;
+}
+
+.info-card p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.info-card ul {
+  list-style: none;
+  padding-left: 10px;
+}
+
+.info-card li {
+  margin: 8px 0;
+  padding-left: 5px;
+  font-size: 15px;
+}
+
+.creditos {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #bbb;
+}
+
+/* ✨ Animación suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -3,7 +3,7 @@ async function mostrarLista() {
   content.innerHTML = "<h2>🎬 Series populares</h2><div class='show-grid'></div>";
   const res = await fetch("https://api.tvmaze.com/shows?page=1");
   const shows = await res.json();
-  showsCache = shows.slice(0, 20);
+  showsCache = shows.slice(0, 150);
   renderShows(showsCache);
 }
 
@@ -35,7 +35,7 @@ async function mostrarDetalle(id) {
     <img src="${show.image?.original || 'https://via.placeholder.com/250'}" width="250" alt="${show.name}">
     <p>${show.summary || "No hay sinopsis disponible."}</p>
     <div style="text-align: center;">
-      <button onclick="agregarFavorito(${show.id}, '${show.name.replace(/'/g, "\\'")}')">⭐ Agregar a favoritos</button>
+      <button onclick="agregarFavorito(${show.id}, '${show.name.replace(/'/g, "\\'")}', '${show.image?.medium || "https://via.placeholder.com/200x280?text=Sin+imagen"}')">⭐ Agregar a favoritos</button>
       <button onclick="cargarPestaña('home')">⬅️ Volver</button>
     </div>
   `;
