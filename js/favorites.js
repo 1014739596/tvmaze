@@ -1,10 +1,9 @@
 // 📌 Agregar una serie a favoritos
-function agregarFavorito(id, nombre) {
+function agregarFavorito(id, nombre, imagen) {
   if (!favoritos.some(f => f.id === id)) {
-    favoritos.push({ id, nombre });
+    favoritos.push({ id, nombre, imagen });
     localStorage.setItem("favoritos", JSON.stringify(favoritos));
 
-    // Notificación más elegante
     mostrarNotificacion(`✅ "${nombre}" agregado a favoritos`);
   } else {
     mostrarNotificacion(`⚠️ "${nombre}" ya está en favoritos`);
@@ -29,7 +28,7 @@ function mostrarFavoritos() {
     .map(
       f => `
       <div class="show-card">
-        <img src="https://via.placeholder.com/200x280?text=Favorito" alt="${f.nombre}">
+        <img src="${f.imagen || 'https://via.placeholder.com/200x280?text=Sin+imagen'}" alt="${f.nombre}">
         <div class="show-info">
           <h3>${f.nombre}</h3>
           <button class="btn-delete" onclick="eliminarFavorito(${f.id})">❌ Eliminar</button>
@@ -49,17 +48,14 @@ function eliminarFavorito(id) {
   mostrarNotificacion(`🗑️ "${eliminado}" eliminado de favoritos`);
 }
 
-// 💬 Notificación temporal
+// 💬 Notificación flotante
 function mostrarNotificacion(mensaje) {
   const noti = document.createElement("div");
   noti.className = "notificacion";
   noti.textContent = mensaje;
   document.body.appendChild(noti);
 
-  setTimeout(() => {
-    noti.classList.add("visible");
-  }, 100);
-
+  setTimeout(() => noti.classList.add("visible"), 100);
   setTimeout(() => {
     noti.classList.remove("visible");
     setTimeout(() => noti.remove(), 500);
