@@ -641,24 +641,23 @@ main h2,
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Responsividad --- */
-
 /* Tablets */
 @media (max-width: 768px) {
   .menu {
-    flex-wrap: wrap;
-    padding: 8px;
+    gap: 6px;
+    padding: 6px;
   }
 
   .menu button {
-    flex: 1 1 45%; /* dos botones por fila */
-    font-size: 15px;
-    padding: 10px;
+    flex: 1 1 45%;
+    font-size: 13px;
+    padding: 7px 12px;
+    border-radius: 6px;
   }
 
   #content {
     padding: 15px;
-    font-size: 15px;
+    font-size: 14px;
   }
 }
 
@@ -667,17 +666,19 @@ main h2,
   .menu {
     flex-direction: column;
     align-items: stretch;
-    gap: 8px;
+    gap: 5px;
+    padding: 5px;
   }
 
   .menu button {
     width: 100%;
-    font-size: 14px;
-    padding: 12px;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
   }
 
   #content {
-    font-size: 14px;
+    font-size: 13px;
     padding: 10px;
   }
 }
