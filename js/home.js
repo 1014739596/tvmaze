@@ -56,7 +56,6 @@ async function mostrarDetalle(id) {
           <button onclick="agregarFavorito(${serie.id}, '${serie.name.replace(/'/g, "\\'")}', '${serie.image ? serie.image.medium : "https://via.placeholder.com/200x280?text=Sin+imagen"}')">
             ⭐ Agregar a favoritos
           </button>
-          <button class="btn-back" onclick="cambiarPestaña('home')">⬅️ Volver</button>
         </div>
       </div>
     `;
