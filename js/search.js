@@ -1,77 +1,72 @@
-// search.js
 let showsCache = [];
-const API_URL = "https://api.tvmaze.com/search/shows?q=";
-
-// Aseguramos que 'content' existe globalmente
 let content = document.getElementById("content");
 
 function mostrarBuscador() {
-  // Si no existe, lo volvemos a buscar (por seguridad)
-  if (!content) content = document.getElementById("content");
-
   content.innerHTML = `
-    <div class="search-container">
-      <h2>🔍 Buscar series</h2>
-      <div class="search-controls">
-        <input type="text" id="searchInput" placeholder="Ej: Friends..." autocomplete="off">
-        <select id="genreFilter">
-          <option value="">Filtrar por género</option>
-          <option value="Drama">Drama</option>
-          <option value="Comedy">Comedy</option>
-          <option value="Action">Action</option>
-          <option value="Thriller">Thriller</option>
-          <option value="Romance">Romance</option>
-        </select>
-      </div>
-      <div id="results" class="results-grid"></div>
-    </div>
+    <section class="search-section fade-in">
+      <h2>Buscar series</h2>
+      <input type="text" id="searchInput" placeholder="Ej: Friends, The Office..." autocomplete="off">
+      <select id="genreFilter">
+        <option value="">Filtrar por género</option>
+        <option value="Drama">Drama</option>
+        <option value="Comedy">Comedia</option>
+        <option value="Action">Acción</option>
+        <option value="Sci-Fi">Ciencia ficción</option>
+        <option value="Horror">Terror</option>
+        <option value="Romance">Romance</option>
+      </select>
+      <div id="results" class="fade-in"></div>
+      <div id="noResults" class="no-results hidden">No se encontraron resultados.</div>
+    </section>
   `;
 
   const searchInput = document.getElementById("searchInput");
   const genreFilter = document.getElementById("genreFilter");
 
-  if (searchInput) searchInput.addEventListener("input", buscarSerie);
-  if (genreFilter) genreFilter.addEventListener("change", filtrarPorGenero);
+  searchInput.addEventListener("input", debounce(buscarSerie, 500));
+  genreFilter.addEventListener("change", filtrarPorGenero);
 }
 
-async function buscarSerie(e) {
-  const query = e.target.value.trim();
-  const results = document.getElementById("results");
+async function buscarSerie() {
+  const query = document.getElementById("searchInput").value.trim();
+  const resultsDiv = document.getElementById("results");
+  const noResults = document.getElementById("noResults");
 
-  if (!results) return;
   if (!query) {
-    results.innerHTML = `<p class="empty-msg">Escribe algo para comenzar la búsqueda...</p>`;
+    resultsDiv.innerHTML = "";
+    noResults.classList.add("hidden");
     return;
   }
 
-  results.innerHTML = `<p class="loading-msg">Buscando series...</p>`;
+  // Muestra un loader temporal
+  resultsDiv.innerHTML = `<p class="loading">🔍 Buscando "${query}"...</p>`;
+  noResults.classList.add("hidden");
 
   try {
-    const res = await fetch(`${API_URL}${encodeURIComponent(query)}`);
+    const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`);
     const data = await res.json();
 
-    if (!data.length) {
-      results.innerHTML = `<p class="empty-msg">No se encontraron resultados para "${query}".</p>`;
+    showsCache = data.map(r => r.show);
+    if (showsCache.length === 0) {
+      resultsDiv.innerHTML = "";
+      noResults.classList.remove("hidden");
       return;
     }
 
-    showsCache = data.map(r => r.show);
     renderResults(showsCache);
   } catch (error) {
-    console.error("Error al buscar:", error);
-    results.innerHTML = `<p class="error-msg">Error al cargar los datos. Intenta nuevamente.</p>`;
+    console.error("Error al buscar la serie:", error);
+    resultsDiv.innerHTML = `<p class="error">❌ Error al cargar los resultados. Intenta nuevamente.</p>`;
   }
 }
 
 function renderResults(shows) {
   const results = document.getElementById("results");
-  if (!results) return;
-
   results.innerHTML = shows
     .map(
       s => `
-      <div class="show-card" onclick="mostrarDetalle(${s.id})">
-        <img src="${s.image?.medium || 'https://via.placeholder.com/150'}" alt="${s.name}">
+      <div class="show-card fade-in" onclick="mostrarDetalle(${s.id})">
+        <img src="${s.image?.medium || 'https://via.placeholder.com/300x400?text=Sin+imagen'}" alt="${s.name}">
         <div class="show-info">
           <h3>${s.name}</h3>
           <p>${s.genres.length ? s.genres.join(", ") : "Sin género"}</p>
@@ -87,6 +82,21 @@ function filtrarPorGenero() {
   const filtrados = genre
     ? showsCache.filter(s => s.genres.includes(genre))
     : showsCache;
-
   renderResults(filtrados);
+
+  const noResults = document.getElementById("noResults");
+  if (filtrados.length === 0) {
+    noResults.classList.remove("hidden");
+  } else {
+    noResults.classList.add("hidden");
+  }
+}
+
+/* 🧠 Función debounce: evita múltiples llamadas rápidas al escribir */
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
 }
