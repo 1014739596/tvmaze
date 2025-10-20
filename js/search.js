@@ -11,41 +11,67 @@ function mostrarBuscador() {
     <div id="results"></div>
   `;
 
-  document.getElementById("searchInput").addEventListener("input", buscarSerie);
-  document.getElementById("genreFilter").addEventListener("change", filtrarPorGenero);
+  var input = document.getElementById("searchInput");
+  var select = document.getElementById("genreFilter");
+
+  input.addEventListener("input", buscarSerie);
+  select.addEventListener("change", filtrarPorGenero);
 }
 
-async function buscarSerie(e) {
-  const query = e.target.value.trim();
-  if (!query) return (document.getElementById("results").innerHTML = "");
+function buscarSerie(evento) {
+  var texto = evento.target.value.trim();
 
-  const res = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`);
-  const data = await res.json();
-  showsCache = data.map(r => r.show);
-  renderResults(showsCache);
+  if (texto === "") {
+    document.getElementById("results").innerHTML = "";
+    return;
+  }
+
+  fetch("https://api.tvmaze.com/search/shows?q=" + texto)
+    .then(function (respuesta) {
+      return respuesta.json();
+    })
+    .then(function (datos) {
+      showsCache = datos.map(function (item) {
+        return item.show;
+      });
+
+      mostrarResultados(showsCache);
+    })
+    .catch(function (error) {
+      console.log("Error al buscar:", error);
+    });
 }
 
-function renderResults(shows) {
-  const results = document.getElementById("results");
-  results.innerHTML = shows
-    .map(
-      s => `
-    <div class="show-card" onclick="mostrarDetalle(${s.id})">
-      <img src="${s.image?.medium || 'https://via.placeholder.com/100'}">
-      <div class="show-info">
-        <h3>${s.name}</h3>
-        <p>${s.genres.join(", ")}</p>
+function mostrarResultados(series) {
+  var contenedor = document.getElementById("results");
+  contenedor.innerHTML = "";
+
+  for (var i = 0; i < series.length; i++) {
+    var s = series[i];
+    var imagen = s.image ? s.image.medium : "https://via.placeholder.com/100";
+    var generos = s.genres.length > 0 ? s.genres.join(", ") : "Sin género";
+
+    contenedor.innerHTML += `
+      <div class="show-card" onclick="mostrarDetalle(${s.id})">
+        <img src="${imagen}" alt="${s.name}">
+        <div class="show-info">
+          <h3>${s.name}</h3>
+          <p>${generos}</p>
+        </div>
       </div>
-    </div>
-  `
-    )
-    .join("");
+    `;
+  }
 }
 
 function filtrarPorGenero() {
-  const genre = document.getElementById("genreFilter").value;
-  const filtrados = genre
-    ? showsCache.filter(s => s.genres.includes(genre))
-    : showsCache;
-  renderResults(filtrados);
+  var generoSeleccionado = document.getElementById("genreFilter").value;
+
+  if (generoSeleccionado === "") {
+    mostrarResultados(showsCache);
+  } else {
+    var filtradas = showsCache.filter(function (serie) {
+      return serie.genres.includes(generoSeleccionado);
+    });
+    mostrarResultados(filtradas);
+  }
 }

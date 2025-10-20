@@ -1,46 +1,66 @@
-// Mostrar lista principal de series
 async function mostrarLista() {
   content.innerHTML = "<h2>🎬 Series populares</h2><div class='show-grid'></div>";
-  const res = await fetch("https://api.tvmaze.com/shows?page=1");
-  const shows = await res.json();
-  showsCache = shows.slice(0, 20);
-  renderShows(showsCache);
+
+  try {
+    const respuesta = await fetch("https://api.tvmaze.com/shows?page=1");
+    const datos = await respuesta.json();
+
+    showsCache = datos.slice(0, 200);
+
+    mostrarSeries(showsCache);
+  } catch (error) {
+    content.innerHTML = "<p style='color:red;'>Error al cargar las series.</p>";
+  }
 }
 
-// Renderizar tarjetas de series
-function renderShows(shows) {
+function mostrarSeries(lista) {
   const grid = document.querySelector(".show-grid");
-  grid.innerHTML = shows
-    .map(
-      (s) => `
-      <div class="show-card" onclick="mostrarDetalle(${s.id})">
-        <img src="${s.image?.medium || 'https://via.placeholder.com/150'}" alt="${s.name}">
-        <div class="show-info">
-          <h3>${s.name}</h3>
-          <p>${s.genres.length ? s.genres.join(", ") : "Sin género"}</p>
-        </div>
+
+  grid.innerHTML = ""; 
+
+  lista.forEach(serie => {
+    // Creamos un div para cada serie
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "show-card";
+    tarjeta.onclick = function() {
+      mostrarDetalle(serie.id);
+    };
+
+    const imagen = serie.image ? serie.image.medium : "https://via.placeholder.com/150";
+
+    tarjeta.innerHTML = `
+      <img src="${imagen}" alt="${serie.name}">
+      <div class="show-info">
+        <h3>${serie.name}</h3>
+        <p>${serie.genres.length > 0 ? serie.genres.join(", ") : "Sin género"}</p>
       </div>
-    `
-    )
-    .join("");
+    `;
+
+    grid.appendChild(tarjeta);
+  });
 }
 
-// Mostrar detalle de una serie
 async function mostrarDetalle(id) {
-  const res = await fetch(`https://api.tvmaze.com/shows/${id}`);
-  const show = await res.json();
+  try {
+    const respuesta = await fetch(`https://api.tvmaze.com/shows/${id}`);
+    const serie = await respuesta.json();
 
-  content.innerHTML = `
-      <div class="detail-container fade-in">
-        <h2 class="detail-title">${show.name}</h2>
-        <img src="${show.image?.original || 'https://via.placeholder.com/250'}" alt="${show.name}" class="detail-img">
+    content.innerHTML = `
+      <div class="detail-container">
+        <h2 class="detail-title">${serie.name}</h2>
+        <img src="${serie.image ? serie.image.original : 'https://via.placeholder.com/250'}" alt="${serie.name}" class="detail-img">
         <div class="detail-info">
-          <p class="detail-summary">${show.summary || "Sin descripción disponible."}</p>
+          <p class="detail-summary">${serie.summary || "Sin descripción disponible."}</p>
         </div>
         <div class="detail-buttons">
-          <button class="btn-fav" onclick="agregarFavorito(${show.id}, '${show.name.replace(/'/g, "\\'")}')">⭐ Agregar a favoritos</button>
-          <button class="btn-back" onclick="cargarPestaña('home')">⬅️ Volver</button>
+          <button onclick="agregarFavorito(${serie.id}, '${serie.name.replace(/'/g, "\\'")}', '${serie.image ? serie.image.medium : "https://via.placeholder.com/200x280?text=Sin+imagen"}')">
+            ⭐ Agregar a favoritos
+          </button>
+          <button class="btn-back" onclick="cambiarPestaña('home')">⬅️ Volver</button>
         </div>
       </div>
-  `;
+    `;
+  } catch (error) {
+    content.innerHTML = "<p style='color:red;'>Error al mostrar los detalles.</p>";
+  }
 }
