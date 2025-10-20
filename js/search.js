@@ -1,6 +1,14 @@
+// search.js
 let showsCache = [];
+const API_URL = "https://api.tvmaze.com/search/shows?q=";
+
+// Aseguramos que 'content' existe globalmente
+let content = document.getElementById("content");
 
 function mostrarBuscador() {
+  // Si no existe, lo volvemos a buscar (por seguridad)
+  if (!content) content = document.getElementById("content");
+
   content.innerHTML = `
     <div class="search-container">
       <h2>🔍 Buscar series</h2>
@@ -19,14 +27,18 @@ function mostrarBuscador() {
     </div>
   `;
 
-  document.getElementById("searchInput").addEventListener("input", buscarSerie);
-  document.getElementById("genreFilter").addEventListener("change", filtrarPorGenero);
+  const searchInput = document.getElementById("searchInput");
+  const genreFilter = document.getElementById("genreFilter");
+
+  if (searchInput) searchInput.addEventListener("input", buscarSerie);
+  if (genreFilter) genreFilter.addEventListener("change", filtrarPorGenero);
 }
 
 async function buscarSerie(e) {
   const query = e.target.value.trim();
   const results = document.getElementById("results");
 
+  if (!results) return;
   if (!query) {
     results.innerHTML = `<p class="empty-msg">Escribe algo para comenzar la búsqueda...</p>`;
     return;
@@ -35,7 +47,7 @@ async function buscarSerie(e) {
   results.innerHTML = `<p class="loading-msg">Buscando series...</p>`;
 
   try {
-    const res = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`);
+    const res = await fetch(`${API_URL}${encodeURIComponent(query)}`);
     const data = await res.json();
 
     if (!data.length) {
@@ -46,12 +58,14 @@ async function buscarSerie(e) {
     showsCache = data.map(r => r.show);
     renderResults(showsCache);
   } catch (error) {
+    console.error("Error al buscar:", error);
     results.innerHTML = `<p class="error-msg">Error al cargar los datos. Intenta nuevamente.</p>`;
   }
 }
 
 function renderResults(shows) {
   const results = document.getElementById("results");
+  if (!results) return;
 
   results.innerHTML = shows
     .map(
