@@ -24,7 +24,7 @@ function renderShows(shows) {
   showsContainer.innerHTML = shows
     .map(
       s => `
-      <div class="show-card" onclick="mostrarDetalle(${s.id})">
+      <div class="show-card" onclick="(${s.id})">
         <img src="${s.image?.medium || 'https://via.placeholder.com/150'}" alt="${s.name}">
         <div class="show-info">
           <h3>${s.name}</h3>
